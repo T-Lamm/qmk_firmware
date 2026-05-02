@@ -1,23 +1,24 @@
-#ifdef RGB_MATRIX_SNAKE
+#ifndef RGB_MATRIX_SNAKE
 //TLamm costum effect first
 RGB_MATRIX_EFFECT(field_test)
-////////////////////////////////////what the fuck is wrong here
+//what the fuck is wrong here
 
 //static test
 //the following numbers indicate the gamefield for the q6
 //21 to 31
-uint8_t row0 = 21;
+static uint8_t row0 = 21;
 //42 to 52
-uint8_t row1 = 42;
+static uint8_t row1 = 42;
 //61 to 71
-uint8_t row2 = 61;
+static uint8_t row2 = 61;
 //80 to 91
-uint8_t row3 = 82;
-//uint8_t board[10][3]={0};
-uint8_t direction = 0; //0 inactiv; 1 left; 2 up; 3 down; 4 right;
-uint8_t queue[44]= {0};
 
-bool is_movement_valid(unit8_t snakehead, unit8_t direction){ // later the snakeindexarray needs to be checked
+static uint8_t row3 = 82;
+static uint8_t board[10][3]={0};
+static uint4_t direction = 0; //0 inactiv; 1 left; 2 up; 3 down; 4 right;
+static uint8_t queue[44]= {0};
+
+bool is_movement_valid(unit8_t snakehead, unit4_t direction){ // later the snakeindexarray needs to be checked
     switch(direction){
         case 1: //left
             if(snakehead%4 > 1){
@@ -34,8 +35,8 @@ bool is_movement_valid(unit8_t snakehead, unit8_t direction){ // later the snake
         case 3: //down
             if(snakehead < 33){
                 return 1;
-            break;
             }
+            break;
         case 4: //right
             if(snakehead%4 < 11 ){
                 return 1;
@@ -45,7 +46,7 @@ bool is_movement_valid(unit8_t snakehead, unit8_t direction){ // later the snake
 }
 
 
-uint8 snakehead = 20;
+static uint8_t snakehead = 20;
 bool movement_to_arrowkeys(uint16_t keycode, keyrecord_t *record, uint8_t *snakehead, uint8_t *direction){//current snakehead
     if(record->event.pressed){//unit16_t keycode ist schlecht
         switch(keycode){
@@ -69,9 +70,9 @@ bool movement_to_arrowkeys(uint16_t keycode, keyrecord_t *record, uint8_t *snake
 
             case KC_LEFT:
             if(is_movement_valid(direction) == 1){
-                sankhead = snakehead -1;
-            break;
+                snakehead = snakehead -1;
             }
+            break;
         }
     }
     return true;
