@@ -1,2 +1,7 @@
 SRC += _example.c
 RGB_MATRIX_CUSTOM_USER = yes
+LT0_enable = yes
+MOUSEKEY_ENABLE = no
+GRAVE_ESC_ENABEL = no
+MAGIC_ENABLE = no
+AUDIO_ENABLE = no
