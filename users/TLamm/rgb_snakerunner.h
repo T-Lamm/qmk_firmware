@@ -1,9 +1,12 @@
 #pragma once
 
-unit8_t headatedge(unint8_t snakehead, unint8_t direction) { // later the snakeindexarray needs to be checked
+//wrapper function
+//bool snakeengine(uint8_t *snakehead, uint8_t* direction)//additional parameters needed
+
+uint8_t headatedge(uint8_t snakehead, uint8_t direction) { // later the snakeindexarray needs to be checked
                                                              // this function checks if the next moment is valid/ if when we do an additional step are still in bound
                                                              // line numbers are not relativ not the absolut indexes
-    unit_8 edge = 0;
+    unit_8 edge = 0b00000000;
     switch (direction) { // 180degree turns are not allowed
         case 0:
             edge = edge & right; // left
