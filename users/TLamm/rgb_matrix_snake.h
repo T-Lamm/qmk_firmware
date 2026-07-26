@@ -6,7 +6,7 @@ RGB_MATRIX_EFFECT(snake)
 // the row with l_shift needs to be adjusted to ANSI or ISO layout
 const unit8_t ISO                            = 1; // set this to 0 for ANSI
 const unit8_t boardsize                      = 4; // standardsize is letter key + numbers no f-keys
-const uint8_t firstIndexOfRow[boardsize - 1] = {21, 42, 61, 82};
+const uint8_t firstIndexOfRow[boardsize - 1] = {21, 42, 61, 80};
 // ggf there row0 for the fkeys
 // row1 form 21 to 31
 // row2 form 42 to 52
@@ -26,13 +26,14 @@ const unit8_t right = 0b00000010;
 const unit8_t up    = 0b00000100;
 const unit8_t down  = 0b00001000;
 
-static bool    board[10][3] = {0};                     // we define a board, is there a part of the snake or not
+//static bool    board[10][3] = {0};                     // we define a board, is there a part of the snake or not
 static uint8_t direction    = 6;                       // 5 inactiv; 0 left; 1 right; up 2; down 3 in which direction is the snake traveling //6 reset
-static uint8_t queue[44]    = {0};                     // we build a queue of our snake bodyparts
-static uint8_t snakehead    = 66;                      // start of snake maybe not static
-static uint8_t food         = 22;                      // replace this with a random seed
+static uint8_t queue[44]    = {65, 64, 63};                     // we build a queue of our snake bodyparts
+static uint8_t snakehead    = 65;                      // start of snake maybe not static
+static uint8_t* tail        = queue[3]
+static uint8_t food         = 69;                      // replace this with a random seed
 unit8_t        speed        = rgb_matrix_config.speed; //// speed is defined with rgb_matrix_config.speed
-
+/////////clk///////////////
 // only customize the led backlight of the out matrix once
 // as a first step the entire field gets a default color
 static bool snake_init(effect_params_t *params) {
