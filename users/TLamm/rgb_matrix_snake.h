@@ -9,8 +9,8 @@ const unit8_t boardsize                      = 4; // standardsize is letter key 
 const uint8_t firstIndexOfRow[boardsize - 1] = {21, 42, 61, 80};
 // ggf there row0 for the fkeys
 // row1 form 21 to 31
-// row2 form 42 to 52
-// row3 form 61 to 71
+// row2 form 42 to 51
+// row3 form 61 to 70
 // row4 form 80 to 91
 //---------------------------------------
 // row0 = g_led_config.matrix_co[0][1]
@@ -25,14 +25,17 @@ const unit8_t left  = 0b00000001;
 const unit8_t right = 0b00000010;
 const unit8_t up    = 0b00000100;
 const unit8_t down  = 0b00001000;
+const unit8_t reset = 0b00010000;
+const unit8_t ready = 0b00100000;
 
-//static bool    board[10][3] = {0};                     // we define a board, is there a part of the snake or not
-static uint8_t direction    = 6;                       // 5 inactiv; 0 left; 1 right; up 2; down 3 in which direction is the snake traveling //6 reset
-static uint8_t queue[44]    = {65, 64, 63};                     // we build a queue of our snake bodyparts
-static uint8_t snakehead    = 65;                      // start of snake maybe not static
-static uint8_t* tail        = queue[3]
-static uint8_t food         = 69;                      // replace this with a random seed
-unit8_t        speed        = rgb_matrix_config.speed; //// speed is defined with rgb_matrix_config.speed
+// static bool    board[10][3] = {0};                     // we define a board, is there a part of the snake or not
+static uint8_t  direction = reset;        // 5 inactiv; 0 left; 1 right; up 2; down 3 in which direction is the snake traveling //6 reset
+static uint8_t  queue[44] = {65, 64, 63}; // we build a queue of our snake bodyparts
+static uint8_t *snakehead = queue[0];
+static uint8_t *tail      = queue[2];
+static uint8_t  food      = 69;
+unit8_t         speed     = rgb_matrix_config.speed; //// speed is defined with rgb_matrix_config.speed
+static bool     cValid    = 0;
 /////////clk///////////////
 // only customize the led backlight of the out matrix once
 // as a first step the entire field gets a default color
@@ -42,11 +45,12 @@ static bool snake_init(effect_params_t *params) {
     for (uint8_t i = led_min; i < led_max; i++) {
         rgb_matrix_set_color(i, 0x00, 0x3F, 0xFF);
     };
-    direction = 1;
-    snakehead = 66;
+    direction = left;
+    snakehead = queue[0];
+    queue     = {65, 64, 63};
+    tail      = queue[2]
 };
 static bool snakemain(effect_params_t *params) {
-
     for (unit_8 i = 0; i < boardsize, i++) { // colums
         for (unit8 j = 0; j < 10; j++) {     // rows
         if(boardsize[firstIndexOfRow[i] + j] == 0{
