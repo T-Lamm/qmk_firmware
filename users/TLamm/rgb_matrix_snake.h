@@ -4,9 +4,9 @@ RGB_MATRIX_EFFECT(snake)
 // left = 0; right = 1; up= 2; down = 3;
 // here the board parameters are defined
 // the row with l_shift needs to be adjusted to ANSI or ISO layout
-const unit8_t ISO                            = 1; // set this to 0 for ANSI
+//const unit8_t ISO                            = 1; // set this to 0 for ANSI
 const unit8_t boardsize                      = 4; // standardsize is letter key + numbers no f-keys
-const uint8_t firstIndexOfRow[boardsize - 1] = {21, 42, 61, 80};
+const uint8_t firstIndexOfRow[boardsize ] = {21, 42, 61, 80};
 // ggf there row0 for the fkeys
 // row1 form 21 to 31
 // row2 form 42 to 51

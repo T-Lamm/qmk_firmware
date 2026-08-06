@@ -22,12 +22,15 @@ const uint8_t down                       = 0b00001000;
 const uint8_t reset                      = 0b00010000;
 const uint8_t ready                      = 0b00100000;
 const uint8_t boardsize                  = 4; // standard size is letter key + numbers no f-keys
+const uint8_t error                      = 0b11111111;
 const uint8_t firstIndexOfRow[boardsize] = {21, 42, 61, 80};
+// row0 = g_led_config.matrix_co[0][1]
 
 // static bool    board[11][4] = {0};                     // we define a board, is there a part of the snake or not
 static uint8_t direction    = reset;        // 5 inactiv; 0 left; 1 right; up 2; down 3 in which direction is the snake traveling //6 reset
-static uint8_t queue[44]    = {65, 64, 63}; // we build a queue of our snake bodyparts
-static uint8_t snakehead_ix = 1; //missing correct starting point
+static uint8_t queue[44]    = {63, 64, 65}; // we build a queue of our snake bodyparts
+static uint8_t snakehead    = 3;
+static uint8_t snakehead_ix = 1; // missing correct starting point
 static uint8_t snakehead_iy = 1;
 static uint8_t tail         = 1;
 static uint8_t food         = 69;
@@ -38,23 +41,33 @@ static bool    cValid       = 0;
 // wrapper function
 // bool snakeengine(uint8_t queue[snakehead], uint8_t* direction)//additional parameters needed
 bool localition_is_valid() { // new definition
+    // the board starts with 1
     if (snakehead_ix < 1) {
-        direction = reset;
+        direction = error;
+        return 0;
     } else if (snakehead_ix < 4) {
-        direction = reset;
+        direction = error;
+        return 0;
     } else if (snakehead_iy < 1) {
-        direction = reset;
+        direction = error;
+        return 0;
     } else if (snakehead_iy > 11) {
-        direction = reset;
+        direction = error;
+        return 0;
     } else {
-        for (unit8_t i = 1, i >= 44 || queue[i] = 0, i++) {
-            if (queue[0] == queue[i]) {
-                direction = 5;
+        for (unit8_t i = snakehead + 1; i = tail || i == snakehead , i++) {
+            if(i >= 45){
+                i = 0;
             }
-        }
-    }
-}
-
+            if (queue[snakehead] == queue[i]) {
+                direction = error;
+            return 0;
+            };
+        };
+    };
+    return 1;
+};
+/*
 bool localition_is_valid(uint8_t direction) { // later the snakeindexarray needs to be checked
                                               // this function checks if the next moment is valid/ if when we do an additional step are still in bound
                                               // line numbers are not relativ not the absolut indexes
@@ -81,7 +94,7 @@ bool localition_is_valid(uint8_t direction) { // later the snakeindexarray needs
     }
     return edge;
 } // better to change if the currnet position is valid; error if yes
-
+*/
 void movement_to_arrowkeys(uint8_t clk, uint16_t keycode, keyrecord_t *record) { // current snakehead
     // here we map the the keypresses to a direction change
     // we test with headatedge if the directionchange is allowed, if not nothing happens
@@ -117,19 +130,20 @@ void movement_to_arrowkeys(uint8_t clk, uint16_t keycode, keyrecord_t *record) {
 
                 case KC_DOWN:
                     if (direction != up) {
-                        direction = 3;
+                        direction = down;
                         cValid    = 0;
                     };
                     break;
 
                 case KC_PGUP: // reset
-                    direction = 1;
-                    snakehead = 70;
+                    direction = right;
+                    queue = {63, 64, 65};
+                    snakehead = 3;
                     cValid    = 0;
                     break;
 
                 case KC_PFGDN:
-                    direction = 6;
+                    direction = reset;
                     cValid    = 0;
                     break;
             };
@@ -144,14 +158,20 @@ void movement_to_arrowkeys(uint8_t clk, uint16_t keycode, keyrecord_t *record) {
 //  row3 form 61 to 70
 //  row4 form 80 to 91
 void queue_snakebody(bool clk) {
-    int8_t new_snakehead;
     //  to begin of each clk_event we calculate the next position of the snakehead;
     if (clk == 1) {
+        //  if the snake head ate food, we increase the length of the body in the next clk_event and generate a new food source
+        if (food == queue[snakehead]) { // array length check 404
+            queue[--tail] = queue[snakehead];
+            food          = random8() & 0x00111111;
+            if (food > 64) {
+                food = food - 22;
+            };
+            // 404 compare random8 value to snakebody;
+        };
         switch (direction) {
             case left:
-                if (queue[snakehead] % 4 < 1) {
-                    new_snakehead = --direction;
-                };
+                snakehead_iy--;
                 break;
 
             case right:
@@ -172,15 +192,7 @@ void queue_snakebody(bool clk) {
                 };
                 break;
         };
-        //  if the snake head ate food, we increase the length of the body in the next clk_event and generate a new food source
-        if (food == queue[snakehead]) { // array length check 404
-            queue[--tail] = queue[snakehead];
-            food          = random8() & 0x00111111;
-            if (food > 64) {
-                food = food - 22;
-            };
-            // 404 compare random8 value to snakebody;
-        };
+        queue[snakehead++] = functionindextonumber;
         //  every game tick we move the body of the snake
         uint8_t tmp = queue[snakehead];
         snakehead++;
